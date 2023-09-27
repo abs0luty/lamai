@@ -1,7 +1,7 @@
 package exceptions;
 
-import ast.LocationAware;
-import ast.SegmentLocation;
+import ast.location.LocationAware;
+import ast.location.SegmentLocation;
 
 public class LamaException extends Exception implements LocationAware {
 

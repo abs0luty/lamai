@@ -3,10 +3,10 @@ package parser;
 import java.util.HashMap;
 import java.util.PrimitiveIterator.OfInt;
 
-import ast.ByteLocation;
-import ast.SegmentLocation;
-import ast.Token;
-import ast.TokenKind;
+import ast.location.ByteLocation;
+import ast.location.SegmentLocation;
+import ast.token.Token;
+import ast.token.TokenKind;
 import parser.exceptions.LexException;
 import parser.exceptions.UnexpectedCharacterException;
 import parser.exceptions.UnterminatedMultiLineComment;

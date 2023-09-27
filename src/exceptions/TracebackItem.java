@@ -1,8 +1,8 @@
 package exceptions;
 
 import ast.Identifier;
-import ast.LocationAware;
-import ast.SegmentLocation;
+import ast.location.LocationAware;
+import ast.location.SegmentLocation;
 
 public class TracebackItem implements LocationAware {
 

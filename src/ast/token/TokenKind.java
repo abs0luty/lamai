@@ -1,4 +1,4 @@
-package ast;
+package ast.token;
 
 public enum TokenKind {
   /**

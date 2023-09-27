@@ -1,4 +1,7 @@
-package ast;
+package ast.token;
+
+import ast.location.LocationAware;
+import ast.location.SegmentLocation;
 
 public final class Token implements LocationAware {
 

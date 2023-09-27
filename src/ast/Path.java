@@ -1,23 +1,30 @@
 package ast;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ast.location.LocationAware;
+import ast.location.SegmentLocation;
+
 public final class Path implements LocationAware {
+
   /**
    * A list of path segments (identifiers separated by dots).
    */
-  private List<Identifier> segments = List.of();
+  private List<Identifier> segments;
 
   public Path() {
+    this.segments = new ArrayList<>();
   }
 
   public Path(Identifier segment) {
-    this.segments = List.of(segment);
+    this.segments = new ArrayList<>();
+    this.segments.add(segment);
   }
 
   public Path(Identifier... segments) {
-    this.segments = List.of(segments);
+    this.segments = new ArrayList<>();
   }
 
   public Path(List<Identifier> segments) {

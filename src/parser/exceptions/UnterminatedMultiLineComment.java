@@ -1,6 +1,6 @@
 package parser.exceptions;
 
-import ast.SegmentLocation;
+import ast.location.SegmentLocation;
 
 public final class UnterminatedMultiLineComment extends LexException {
 
@@ -8,6 +8,6 @@ public final class UnterminatedMultiLineComment extends LexException {
     super(
         location,
         String.format(
-            "Unterminated multiline comment: reached EOF before the end of comment"));
+            "parse error: unterminated multiline comment: reached EOF before the end of comment"));
   }
 }

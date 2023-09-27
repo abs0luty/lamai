@@ -1,4 +1,4 @@
-package ast;
+package ast.location;
 
 public final class ByteLocation {
     private String filepath;

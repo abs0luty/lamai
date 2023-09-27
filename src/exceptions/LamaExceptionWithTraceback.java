@@ -2,8 +2,8 @@ package exceptions;
 
 import java.util.List;
 
-import ast.LocationAware;
-import ast.SegmentLocation;
+import ast.location.LocationAware;
+import ast.location.SegmentLocation;
 
 public class LamaExceptionWithTraceback extends RuntimeException implements LocationAware {
 

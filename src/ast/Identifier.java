@@ -1,5 +1,8 @@
 package ast;
 
+import ast.location.LocationAware;
+import ast.location.SegmentLocation;
+
 public final class Identifier implements LocationAware {
 
     private final String name;

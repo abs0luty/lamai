@@ -1,4 +1,4 @@
-package ast;
+package ast.location;
 
 public final class SegmentLocation {
 

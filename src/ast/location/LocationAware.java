@@ -1,4 +1,4 @@
-package ast;
+package ast.location;
 
 public interface LocationAware {
 

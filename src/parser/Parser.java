@@ -1,8 +1,9 @@
 package parser;
 
-import ast.BreakStatement;
-import ast.Token;
-import ast.TokenKind;
+import ast.literal.Statement;
+import ast.statement.BreakStatement;
+import ast.token.Token;
+import ast.token.TokenKind;
 import parser.exceptions.ParseException;
 import parser.exceptions.UnexpectedTokenException;
 
@@ -23,7 +24,7 @@ public final class Parser {
   }
 
   private BreakStatement parseBreakStatement() throws ParseException {
-    consume(TokenKind.BREAK);
+    advance();
 
     return new BreakStatement(currentToken.getLocation());
   }

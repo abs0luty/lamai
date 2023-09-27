@@ -1,6 +1,6 @@
 package parser.exceptions;
 
-import ast.SegmentLocation;
+import ast.location.SegmentLocation;
 import exceptions.LamaException;
 
 public class ParseException extends LamaException {

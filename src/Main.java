@@ -1,5 +1,4 @@
-import ast.Token;
-import ast.TokenKind;
+import ast.token.Token;
 import parser.Lexer;
 
 public class Main {

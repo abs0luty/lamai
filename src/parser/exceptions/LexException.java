@@ -1,6 +1,6 @@
 package parser.exceptions;
 
-import ast.SegmentLocation;
+import ast.location.SegmentLocation;
 
 public class LexException extends ParseException {
 
