@@ -49,9 +49,8 @@ public final class ByteLocation {
     }
 
     /**
-     * <p>
      * Retrieves the location of the next byte with the given offset.
-     * </p>
+     * 
      * <p>
      * <b>NOTE</b>: Returns location of the byte with incremented column number, but
      * line numbers
@@ -66,9 +65,8 @@ public final class ByteLocation {
     }
 
     /**
-     * <p>
      * Retrieves the location of the next byte.
-     * </p>
+     * 
      * <p>
      * <b>NOTE</b>: Returns location of the byte with incremented column number, but
      * line numbers
@@ -82,9 +80,8 @@ public final class ByteLocation {
     }
 
     /**
-     * <p>
      * Retrieves the location of the previous byte with the given offset.
-     * </p>
+     * 
      * <p>
      * <b>NOTE</b>: Returns location of the byte with decremented column number, but
      * line numbers
@@ -99,9 +96,8 @@ public final class ByteLocation {
     }
 
     /**
-     * <p>
      * Retrieves the location of the previous byte.
-     * </p>
+     * 
      * <p>
      * <b>NOTE</b>: Returns location of the byte with decremented column number, but
      * line numbers

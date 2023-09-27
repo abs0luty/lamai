@@ -8,7 +8,7 @@ import ast.SegmentLocation;
 import ast.Token;
 import ast.TokenKind;
 
-public class Lexer {
+public final class Lexer {
 
   private final OfInt codePointsIterator;
   private ByteLocation cursorLocation;
@@ -66,6 +66,16 @@ public class Lexer {
     }
   }
 
+  /**
+   * Calculates the current code point's code segment location.
+   * 
+   * <p>
+   * <b>Note</b>: {@link #currentByteLocation()} should be used when
+   * it's known that the code point is single byte.
+   * </p>
+   * 
+   * @return the current code point's location
+   */
   private SegmentLocation currentCodePointLocation() {
     return new SegmentLocation(
         cursorLocation,
@@ -73,18 +83,41 @@ public class Lexer {
             bytesInCodePoint(currentCodePoint)));
   }
 
+  /**
+   * Calculates the current code point's code segment location when
+   * it's known that the code point is single byte.
+   * 
+   * <p>
+   * <b>Note</b>: {@link #currentCodePointLocation()} should be used when
+   * it isn't known that the code point is single byte.
+   * </p>
+   * 
+   * @return the current byte's location
+   */
   private SegmentLocation currentByteLocation() {
     return new SegmentLocation(
         cursorLocation,
         cursorLocation.locationOfNextByte());
   }
 
+  /**
+   * Calculates the current 2 code points' code segment location when it's
+   * known that all of them are single byte.
+   * 
+   * @return the current 2 bytes' location
+   */
   private SegmentLocation currentTwoBytesLocation() {
     return new SegmentLocation(
         cursorLocation,
         cursorLocation.locationOfNextByte(2));
   }
 
+  /**
+   * Calculates the previous code point's code segment location when
+   * it's known that the code point is single byte.
+   * 
+   * @return the previous byte's location
+   */
   private SegmentLocation previousByteLocation() {
     return new SegmentLocation(
         cursorLocation.locationOfPreviousByte(),
@@ -96,7 +129,7 @@ public class Lexer {
    */
   private void advance() {
     // if it's the end of the file, do nothing
-    if (currentCodePoint == null) {
+    if (isEof()) {
       return;
     }
 
@@ -150,16 +183,30 @@ public class Lexer {
         location);
   }
 
+  /**
+   * Skips through all whitespaces after the current code point.
+   */
   private void skipThroughWhitespaces() {
     while (Character.isWhitespace(currentCodePoint)) {
       advance();
     }
   }
 
+  /**
+   * Checks if the current code point is the end of the file.
+   * 
+   * @return {@code true} if the current code point is the end of the file,
+   *         {@code false} otherwise
+   */
   private boolean isEof() {
     return currentCodePoint == null;
   }
 
+  /**
+   * Retrieves the next single line comment token.
+   * 
+   * @return the single line comment token
+   */
   private Token nextSingleLineCommentToken() {
     advanceTwice(); // eat two slashes (`//`)
 
@@ -172,6 +219,11 @@ public class Lexer {
     return new Token(TokenKind.SINGLELINE_COMMENT, new SegmentLocation(startLocation, cursorLocation));
   }
 
+  /**
+   * Retrieves the next multi line comment token.
+   * 
+   * @return the multi line comment token
+   */
   private Token nextMultiLineCommentToken() throws UnterminatedMultiLineComment {
     advanceTwice(); // eat slash + asterisk (`/*`)
 
@@ -188,7 +240,15 @@ public class Lexer {
     return new Token(TokenKind.MULTILINE_COMMENT, new SegmentLocation(startLocation, cursorLocation));
   }
 
-  public Token nextTokenExceptComments() throws UnexpectedCharacterException, UnterminatedMultiLineComment {
+  /**
+   * Retrieves the next token except a comment, advancing the state of the lexer.
+   * 
+   * @return the next token
+   * @throws UnexpectedCharacterException if unexpected character is reached
+   * @throws UnterminatedMultiLineComment if EOF is reached before the end of a
+   *                                      multi line comment
+   */
+  public Token nextTokenExceptComment() throws UnexpectedCharacterException, UnterminatedMultiLineComment {
     Token token = nextToken();
 
     while (token.getKind() == TokenKind.SINGLELINE_COMMENT
@@ -199,6 +259,14 @@ public class Lexer {
     return token;
   }
 
+  /**
+   * Retrieves the next token, advancing the state of the lexer.
+   *
+   * @return the next token
+   * @throws UnexpectedCharacterException if unexpected character is reached
+   * @throws UnterminatedMultiLineComment if EOF is reached before the end of a
+   *                                      multi line comment
+   */
   public Token nextToken() throws UnexpectedCharacterException, UnterminatedMultiLineComment {
     skipThroughWhitespaces();
 
