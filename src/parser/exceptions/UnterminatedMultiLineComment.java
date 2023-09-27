@@ -1,9 +1,8 @@
-package parser;
+package parser.exceptions;
 
 import ast.SegmentLocation;
-import exception.LamaException;
 
-public class UnterminatedMultiLineComment extends LamaException {
+public final class UnterminatedMultiLineComment extends LexException {
 
   public UnterminatedMultiLineComment(SegmentLocation location) {
     super(

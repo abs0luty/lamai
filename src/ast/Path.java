@@ -7,7 +7,7 @@ public final class Path implements LocationAware {
   /**
    * A list of path segments (identifiers separated by dots).
    */
-  List<Identifier> segments = List.of();
+  private List<Identifier> segments = List.of();
 
   public Path() {
   }

@@ -10,6 +10,9 @@ public final class Token implements LocationAware {
     this.location = location;
   }
 
+  /**
+   * @return the kind of the token
+   */
   public TokenKind getKind() {
     return kind;
   }

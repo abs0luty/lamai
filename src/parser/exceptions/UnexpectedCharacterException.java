@@ -1,9 +1,8 @@
-package parser;
+package parser.exceptions;
 
 import ast.SegmentLocation;
-import exception.LamaException;
 
-public class UnexpectedCharacterException extends LamaException {
+public final class UnexpectedCharacterException extends LexException {
   public UnexpectedCharacterException(SegmentLocation location, int characterCodePoint) {
     super(
         location,

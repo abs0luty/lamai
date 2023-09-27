@@ -7,6 +7,9 @@ import ast.ByteLocation;
 import ast.SegmentLocation;
 import ast.Token;
 import ast.TokenKind;
+import parser.exceptions.LexException;
+import parser.exceptions.UnexpectedCharacterException;
+import parser.exceptions.UnterminatedMultiLineComment;
 
 public final class Lexer {
 
@@ -244,11 +247,8 @@ public final class Lexer {
    * Retrieves the next token except a comment, advancing the state of the lexer.
    * 
    * @return the next token
-   * @throws UnexpectedCharacterException if unexpected character is reached
-   * @throws UnterminatedMultiLineComment if EOF is reached before the end of a
-   *                                      multi line comment
    */
-  public Token nextTokenExceptComment() throws UnexpectedCharacterException, UnterminatedMultiLineComment {
+  public Token nextTokenExceptComment() throws LexException {
     Token token = nextToken();
 
     while (token.getKind() == TokenKind.SINGLELINE_COMMENT
@@ -263,11 +263,8 @@ public final class Lexer {
    * Retrieves the next token, advancing the state of the lexer.
    *
    * @return the next token
-   * @throws UnexpectedCharacterException if unexpected character is reached
-   * @throws UnterminatedMultiLineComment if EOF is reached before the end of a
-   *                                      multi line comment
    */
-  public Token nextToken() throws UnexpectedCharacterException, UnterminatedMultiLineComment {
+  public Token nextToken() throws LexException {
     skipThroughWhitespaces();
 
     if (isEof()) {

@@ -1,4 +1,4 @@
-package error;
+package exceptions;
 
 import ast.Identifier;
 import ast.LocationAware;

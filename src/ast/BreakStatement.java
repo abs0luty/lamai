@@ -7,7 +7,7 @@ public final class BreakStatement implements Statement {
     /**
      * The location of the `break `keyword.
      */
-    SegmentLocation location;
+    private final SegmentLocation location;
 
     public BreakStatement(SegmentLocation location) {
         this.location = location;

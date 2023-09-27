@@ -1,4 +1,4 @@
-package exception;
+package exceptions;
 
 import ast.LocationAware;
 import ast.SegmentLocation;

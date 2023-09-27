@@ -2,21 +2,17 @@ package ast;
 
 public final class Identifier implements LocationAware {
 
-    /**
-     * A name of an identifier.
-     */
-    String name;
-
-    /**
-     * A location of an identifier.
-     */
-    SegmentLocation location;
+    private final String name;
+    private final SegmentLocation location;
 
     public Identifier(String name, SegmentLocation location) {
         this.name = name;
         this.location = location;
     }
 
+    /**
+     * @return a name of an identifier
+     */
     public String getName() {
         return name;
     }
