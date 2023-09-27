@@ -1,9 +1,24 @@
 package ast;
 
-public record SegmentLocation(ByteLocation firstByteLocation, ByteLocation lastByteLocation) {
+public final class SegmentLocation {
+
+    private final ByteLocation firstByteLocation, lastByteLocation;
+
+    public SegmentLocation(ByteLocation firstByteLocation, ByteLocation lastByteLocation) {
+        this.firstByteLocation = firstByteLocation;
+        this.lastByteLocation = lastByteLocation;
+    }
 
     public SegmentLocation(ByteLocation firstByteLocation) {
         this(firstByteLocation, firstByteLocation.locationOfNextByte());
+    }
+
+    public ByteLocation getFirstByteLocation() {
+        return firstByteLocation;
+    }
+
+    public ByteLocation getLastByteLocation() {
+        return lastByteLocation;
     }
 
     /**

@@ -2,11 +2,16 @@ package ast;
 
 import ast.visitor.Visitor;
 
-public record BreakStatement(
-        /**
-         * The location of the `break `keyword.
-         */
-        SegmentLocation location) implements Statement {
+public final class BreakStatement implements Statement {
+
+    /**
+     * The location of the `break `keyword.
+     */
+    SegmentLocation location;
+
+    public BreakStatement(SegmentLocation location) {
+        this.location = location;
+    }
 
     @Override
     public SegmentLocation getLocation() {

@@ -1,6 +1,18 @@
 package ast;
 
-public record Token(TokenKind kind, SegmentLocation location) implements LocationAware {
+public final class Token implements LocationAware {
+
+  private final TokenKind kind;
+  private final SegmentLocation location;
+
+  public Token(TokenKind kind, SegmentLocation location) {
+    this.kind = kind;
+    this.location = location;
+  }
+
+  public TokenKind getKind() {
+    return kind;
+  }
 
   @Override
   public SegmentLocation getLocation() {

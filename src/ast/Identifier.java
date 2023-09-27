@@ -1,18 +1,28 @@
 package ast;
 
-public record Identifier(
+public final class Identifier implements LocationAware {
+
     /**
      * A name of an identifier.
      */
-    String name,
+    String name;
 
     /**
      * A location of an identifier.
      */
-    SegmentLocation location) implements LocationAware {
+    SegmentLocation location;
 
-  @Override
-  public SegmentLocation getLocation() {
-    return location;
-  }
+    public Identifier(String name, SegmentLocation location) {
+        this.name = name;
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public SegmentLocation getLocation() {
+        return location;
+    }
 }

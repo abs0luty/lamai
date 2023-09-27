@@ -4,11 +4,20 @@ import ast.Identifier;
 import ast.LocationAware;
 import ast.SegmentLocation;
 
-public record TracebackItem(
-    /**
-     * Name of the function being called.
-     */
-    Identifier functionNameIdentifier) implements LocationAware {
+public class TracebackItem implements LocationAware {
+
+  /**
+   * Name of the function being called.
+   */
+  private Identifier functionNameIdentifier;
+
+  public TracebackItem(Identifier functionNameIdentifier) {
+    this.functionNameIdentifier = functionNameIdentifier;
+  }
+
+  public Identifier getFunctionNameIdentifier() {
+    return functionNameIdentifier;
+  }
 
   @Override
   public SegmentLocation getLocation() {

@@ -1,6 +1,6 @@
 package ast;
 
-public class ByteLocation {
+public final class ByteLocation {
     private String filepath;
     private int lineNumber;
     private int column;
@@ -79,5 +79,38 @@ public class ByteLocation {
      */
     public ByteLocation locationOfNextByte() {
         return new ByteLocation(filepath, lineNumber, column + 1, offset + 1);
+    }
+
+    /**
+     * <p>
+     * Retrieves the location of the previous byte with the given offset.
+     * </p>
+     * <p>
+     * <b>NOTE</b>: Returns location of the byte with decremented column number, but
+     * line numbers
+     * are not processed.
+     * </p>
+     *
+     * @param offset the offset of the byte relative to the current one
+     * @return the location of the previous byte
+     */
+    public ByteLocation locationOfPreviousByte(int offset) {
+        return new ByteLocation(filepath, lineNumber, column - offset, this.offset - offset);
+    }
+
+    /**
+     * <p>
+     * Retrieves the location of the previous byte.
+     * </p>
+     * <p>
+     * <b>NOTE</b>: Returns location of the byte with decremented column number, but
+     * line numbers
+     * are not processed.
+     * </p>
+     *
+     * @return the location of the previos byte
+     */
+    public ByteLocation locationOfPreviousByte() {
+        return new ByteLocation(filepath, lineNumber, column - 1, offset - 1);
     }
 }

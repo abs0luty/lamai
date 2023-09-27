@@ -14,6 +14,10 @@ public class LamaException extends Exception implements LocationAware {
     this.message = message;
   }
 
+  public String getMessage() {
+    return message;
+  }
+
   @Override
   public SegmentLocation getLocation() {
     return location;
