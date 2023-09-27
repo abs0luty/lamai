@@ -167,7 +167,7 @@ public final class Lexer {
     final StringBuilder builder = new StringBuilder();
     final ByteLocation startLocation = cursorLocation;
 
-    while (Character.isAlphabetic(currentCodePoint)) {
+    while (Character.isUnicodeIdentifierPart(currentCodePoint)) {
       builder.appendCodePoint(currentCodePoint);
       advance();
     }
@@ -271,15 +271,7 @@ public final class Lexer {
       return new Token(TokenKind.EOF, new SegmentLocation(cursorLocation));
     }
 
-    if (currentCodePoint == '/' && nextCodePoint == '/') {
-      return nextSingleLineCommentToken();
-    }
-
-    if (currentCodePoint == '/' && nextCodePoint == '*') {
-      return nextMultiLineCommentToken();
-    }
-
-    if (Character.isAlphabetic(currentCodePoint)) {
+    if (Character.isUnicodeIdentifierStart(currentCodePoint)) {
       return nextIdentifierOrKeywordToken();
     }
 
@@ -302,6 +294,13 @@ public final class Lexer {
     } else if (currentCodePoint == '*') {
       return new Token(TokenKind.ASTERISK, currentByteLocation());
     } else if (currentCodePoint == '/') {
+      if (nextCodePoint == '/') {
+        return nextSingleLineCommentToken();
+      }
+
+      if (nextCodePoint == '*') {
+        return nextMultiLineCommentToken();
+      }
       return new Token(TokenKind.SLASH, currentByteLocation());
     } else if (currentCodePoint == '%') {
       return new Token(TokenKind.PERCENT, currentByteLocation());
