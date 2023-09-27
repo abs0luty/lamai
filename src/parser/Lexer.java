@@ -12,7 +12,8 @@ class Lexer {
   private final OfInt codePointsIterator;
   private ByteLocation cursorLocation;
 
-  private int currentCodePoint = 0, nextCodePoint = 0;
+  private Integer currentCodePoint;
+  private Integer nextCodePoint;
 
   /**
    * @param filepath path of the file that's going to be processed
@@ -22,8 +23,8 @@ class Lexer {
     this.codePointsIterator = input.codePoints().iterator();
     this.cursorLocation = new ByteLocation(filepath, 1, 0, 0);
 
-    this.currentCodePoint = codePointsIterator.hasNext() ? codePointsIterator.next() : 0;
-    this.nextCodePoint = codePointsIterator.hasNext() ? codePointsIterator.next() : 0;
+    this.currentCodePoint = codePointsIterator.next();
+    this.nextCodePoint = codePointsIterator.next();
   }
 
   /**
@@ -46,10 +47,22 @@ class Lexer {
     }
   }
 
+  private SegmentLocation currentCodePointLocation() {
+    return new SegmentLocation(
+        cursorLocation,
+        cursorLocation.locationOfNextByte(
+            bytesInCodePoint(currentCodePoint)));
+  }
+
   /**
    * Advances code points iterator to the next code point in the file contents.
    */
   private void advance() {
+    // if it's the end of the file, do nothing
+    if (currentCodePoint == null) {
+      return;
+    }
+
     if (currentCodePoint == '\n') {
       cursorLocation.setColumn(0);
       cursorLocation.setLineNumber(cursorLocation.getLineNumber() + 1);
@@ -87,5 +100,15 @@ class Lexer {
     return new Token(
         TokenKind.IDENTIFIER,
         new SegmentLocation(startLocation, cursorLocation));
+  }
+
+  public Token nextToken() throws UnexpectedCharacterException {
+    if (currentCodePoint == null) {
+      return new Token(TokenKind.EOF, new SegmentLocation(cursorLocation));
+    }
+
+    throw new UnexpectedCharacterException(
+        currentCodePointLocation(),
+        currentCodePoint.intValue());
   }
 }

@@ -2,6 +2,10 @@ package ast;
 
 public record SegmentLocation(ByteLocation firstByteLocation, ByteLocation lastByteLocation) {
 
+    public SegmentLocation(ByteLocation firstByteLocation) {
+        this(firstByteLocation, firstByteLocation.locationOfNextByte());
+    }
+
     /**
      * Checks if the start and end positions of a code segment aren't on the
      * same line.
