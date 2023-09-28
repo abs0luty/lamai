@@ -2,6 +2,7 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import ast.Identifier;
 import ast.expression.Expression;
@@ -12,7 +13,9 @@ import ast.statement.ContinueStatement;
 import ast.statement.DoWhileStatement;
 import ast.statement.ForStatement;
 import ast.statement.FunctionDefinitionStatement;
+import ast.statement.IfStatement;
 import ast.statement.Statement;
+import ast.statement.WhileStatement;
 import ast.token.Token;
 import ast.token.TokenKind;
 import parser.exceptions.ParseException;
@@ -70,6 +73,10 @@ public final class Parser {
         return parseDoWhileStatement();
       case FOR:
         return parseForStatement();
+      case WHILE:
+        return parseWhileStatement();
+      case IF:
+        return parseIfStatement();
       default:
         throw new ExpectedNodeException("statement", nextToken);
     }
@@ -77,6 +84,7 @@ public final class Parser {
 
   private FunctionDefinitionStatement parseFunctionDefinitionStatement() throws ParseException {
     advance();
+
     consume(TokenKind.OPEN_PARENTHESIS);
 
     final Identifier name = consumeIdentifier();
@@ -113,6 +121,7 @@ public final class Parser {
   private ForStatement parseForStatement() throws ParseException {
     final ByteLocation startLocation = nextToken.getLocation().getFirstByteLocation();
     advance();
+
     consume(TokenKind.OPEN_PARENTHESIS);
 
     final Statement initializationStatement = parseStatement();
@@ -137,13 +146,55 @@ public final class Parser {
         location);
   }
 
+  private WhileStatement parseWhileStatement() throws ParseException {
+    final ByteLocation startLocation = nextToken.getLocation().getFirstByteLocation();
+    advance();
+
+    consume(TokenKind.OPEN_PARENTHESIS);
+
+    final Expression condition = parseExpression();
+    consume(TokenKind.CLOSE_PARENTHESIS);
+
+    final Statement body = parseStatement();
+    final SegmentLocation location = new SegmentLocation(
+        startLocation,
+        currentToken.getLocation().getLastByteLocation());
+
+    return new WhileStatement(condition, body, location);
+  }
+
+  private IfStatement parseIfStatement() throws ParseException {
+    final ByteLocation startLocation = nextToken.getLocation().getFirstByteLocation();
+    advance();
+
+    final Expression condition = parseExpression();
+    final Statement ifStatement = parseStatement();
+    final Optional<Statement> elseStatement;
+
+    if (nextToken.getKind().equals(TokenKind.ELSE)) {
+      advance();
+
+      elseStatement = Optional.of(parseStatement());
+    } else {
+      elseStatement = Optional.empty();
+    }
+
+    final SegmentLocation location = new SegmentLocation(
+        startLocation,
+        currentToken.getLocation().getLastByteLocation());
+
+    return new IfStatement(condition, ifStatement, elseStatement, location);
+  }
+
   private BreakStatement parseBreakStatement() throws ParseException {
     advance();
+
     return new BreakStatement(currentToken.getLocation());
   }
 
   private ContinueStatement parseContinueStatement() throws ParseException {
     advance();
+
     return new ContinueStatement(currentToken.getLocation());
   }
 
