@@ -13,11 +13,11 @@ import parser.exceptions.UnterminatedMultiLineComment;
 
 public final class Lexer {
 
+  private final String filepath, contents;
+
   private final OfInt codePointsIterator;
   private ByteLocation cursorLocation;
-
-  private Integer currentCodePoint;
-  private Integer nextCodePoint;
+  private Integer currentCodePoint, nextCodePoint;
 
   private static final HashMap<String, TokenKind> KEYWORDS;
 
@@ -39,14 +39,25 @@ public final class Lexer {
 
   /**
    * @param filepath path of the file that's going to be processed
-   * @param input    contents of the file that's going to be processed
+   * @param contents contents of the file that's going to be processed
    */
-  public Lexer(String filepath, String input) {
-    this.codePointsIterator = input.codePoints().iterator();
+  public Lexer(String filepath, String contents) {
+    this.filepath = filepath;
+    this.contents = contents;
+
+    this.codePointsIterator = contents.codePoints().iterator();
     this.cursorLocation = new ByteLocation(filepath, 1, 0, 0);
 
     this.currentCodePoint = codePointsIterator.next();
     this.nextCodePoint = codePointsIterator.next();
+  }
+
+  public String getFilepath() {
+    return filepath;
+  }
+
+  public String getContents() {
+    return contents;
   }
 
   /**

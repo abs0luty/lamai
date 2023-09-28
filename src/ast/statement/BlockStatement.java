@@ -2,7 +2,6 @@ package ast.statement;
 
 import java.util.List;
 
-import ast.literal.Statement;
 import ast.location.SegmentLocation;
 import ast.visitor.Visitor;
 

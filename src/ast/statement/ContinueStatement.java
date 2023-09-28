@@ -1,6 +1,5 @@
 package ast.statement;
 
-import ast.literal.Statement;
 import ast.location.SegmentLocation;
 import ast.visitor.Visitor;
 

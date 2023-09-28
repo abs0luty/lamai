@@ -1,4 +1,4 @@
-package ast.literal;
+package ast.statement;
 
 import ast.Node;
 
