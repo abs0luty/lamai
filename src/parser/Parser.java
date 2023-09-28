@@ -10,6 +10,7 @@ import ast.location.SegmentLocation;
 import ast.statement.BreakStatement;
 import ast.statement.ContinueStatement;
 import ast.statement.DoWhileStatement;
+import ast.statement.ForStatement;
 import ast.statement.FunctionDefinitionStatement;
 import ast.statement.Statement;
 import ast.token.Token;
@@ -29,11 +30,24 @@ public final class Parser {
     this.nextToken = lexer.nextTokenExceptComment();
   }
 
+  /**
+   * Advances the lexer to the next token.
+   * 
+   * @throws ParseException if an error occured during processing
+   *                        the next token
+   */
   private void advance() throws ParseException {
     currentToken = nextToken;
     nextToken = lexer.nextTokenExceptComment();
   }
 
+  /**
+   * Parses the Lama program's source code.
+   * 
+   * @return a list of statements representing the program's AST
+   * @throws ParseException if an error occured during parsing the
+   *                        source code
+   */
   public List<Statement> parse() throws ParseException {
     List<Statement> statements = new ArrayList<>();
 
@@ -45,7 +59,7 @@ public final class Parser {
   }
 
   private Statement parseStatement() throws ParseException {
-    switch (currentToken.getKind()) {
+    switch (nextToken.getKind()) {
       case BREAK:
         return parseBreakStatement();
       case CONTINUE:
@@ -54,8 +68,10 @@ public final class Parser {
         return parseFunctionDefinitionStatement();
       case DO:
         return parseDoWhileStatement();
+      case FOR:
+        return parseForStatement();
       default:
-        throw new ExpectedNodeException("statement", currentToken);
+        throw new ExpectedNodeException("statement", nextToken);
     }
   }
 
@@ -79,9 +95,9 @@ public final class Parser {
   }
 
   private DoWhileStatement parseDoWhileStatement() throws ParseException {
+    final ByteLocation startLocation = nextToken.getLocation().getFirstByteLocation();
     advance();
 
-    final ByteLocation startLocation = currentToken.getLocation().getFirstByteLocation();
     final Statement statement = parseStatement();
 
     consume(TokenKind.WHILE);
@@ -92,6 +108,33 @@ public final class Parser {
         currentToken.getLocation().getLastByteLocation());
 
     return new DoWhileStatement(condition, statement, location);
+  }
+
+  private ForStatement parseForStatement() throws ParseException {
+    final ByteLocation startLocation = nextToken.getLocation().getFirstByteLocation();
+    advance();
+    consume(TokenKind.OPEN_PARENTHESIS);
+
+    final Statement initializationStatement = parseStatement();
+    consume(TokenKind.COMMA);
+
+    final Expression condition = parseExpression();
+    consume(TokenKind.COMMA);
+
+    final Statement updateStatement = parseStatement();
+    consume(TokenKind.CLOSE_PARENTHESIS);
+
+    final Statement body = parseStatement();
+    final SegmentLocation location = new SegmentLocation(
+        startLocation,
+        currentToken.getLocation().getLastByteLocation());
+
+    return new ForStatement(
+        initializationStatement,
+        condition,
+        updateStatement,
+        body,
+        location);
   }
 
   private BreakStatement parseBreakStatement() throws ParseException {
@@ -112,6 +155,15 @@ public final class Parser {
     }
   }
 
+  /**
+   * Throws exception if the next token kind is not an identifier.
+   * If the next token kind is an identifier, advances the lexer to
+   * the next token and returns a new {@link Identifier} AST Node.
+   * 
+   * @return a new {@link Identifier} AST Node based on the next token
+   * @throws ParseException if the condition was not met or an error
+   *                        occured during processing the next token
+   */
   private Identifier consumeIdentifier() throws ParseException {
     expect(TokenKind.IDENTIFIER);
 
@@ -120,22 +172,41 @@ public final class Parser {
         currentToken.getLocation());
   }
 
+  /**
+   * Resolves the location of the code segment.
+   * 
+   * @param location the location of the code segment
+   * @return the resolved location - a substring of the source code
+   */
   private String resolveLocation(SegmentLocation location) {
     return lexer.getContents().substring(
         location.getFirstByteLocation().getOffset(),
         location.getLastByteLocation().getOffset());
   }
 
+  /**
+   * Throws exception if the next token kind is not an expected one.
+   * If the next token kind is an expected one, advances the lexer to
+   * the next token.
+   * 
+   * @param kind an expected token's kind
+   * @throws ParseException if the condition was not met or an error
+   *                        occured during processing the next token
+   */
   private void consume(TokenKind kind) throws ParseException {
     expect(kind);
     advance();
   }
 
-  private void expect(TokenKind expected) throws ParseException {
+  /**
+   * Throws exception if the next token kind is not an expected one
+   * 
+   * @param expected an expected token's kind
+   * @throws ExpectedTokenException if the condition was not met
+   */
+  private void expect(TokenKind expected) throws ExpectedTokenException {
     if (nextToken.getKind() != expected) {
       throw new ExpectedTokenException(expected, nextToken);
     }
-
-    nextToken = lexer.nextTokenExceptComment();
   }
 }

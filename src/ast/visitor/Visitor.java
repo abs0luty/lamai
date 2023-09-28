@@ -9,6 +9,7 @@ import ast.statement.BlockStatement;
 import ast.statement.BreakStatement;
 import ast.statement.ContinueStatement;
 import ast.statement.DoWhileStatement;
+import ast.statement.ForStatement;
 import ast.statement.FunctionDefinitionStatement;
 import ast.statement.Statement;
 
@@ -23,6 +24,8 @@ public interface Visitor {
   void visit(ContinueStatement statement);
 
   void visit(DoWhileStatement statement);
+
+  void visit(ForStatement statement);
 
   void visit(Statement statement);
 
