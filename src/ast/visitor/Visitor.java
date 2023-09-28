@@ -11,6 +11,7 @@ import ast.statement.ContinueStatement;
 import ast.statement.DoWhileStatement;
 import ast.statement.ForStatement;
 import ast.statement.FunctionDefinitionStatement;
+import ast.statement.ReturnStatement;
 import ast.statement.Statement;
 import ast.statement.WhileStatement;
 
@@ -29,6 +30,8 @@ public interface Visitor {
   void visit(ForStatement statement);
 
   void visit(WhileStatement statement);
+
+  void visit(ReturnStatement statement);
 
   void visit(Statement statement);
 

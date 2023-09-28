@@ -14,6 +14,7 @@ import ast.statement.DoWhileStatement;
 import ast.statement.ForStatement;
 import ast.statement.FunctionDefinitionStatement;
 import ast.statement.IfStatement;
+import ast.statement.ReturnStatement;
 import ast.statement.Statement;
 import ast.statement.WhileStatement;
 import ast.token.Token;
@@ -77,6 +78,8 @@ public final class Parser {
         return parseWhileStatement();
       case IF:
         return parseIfStatement();
+      case RETURN:
+        return parseReturnStatement();
       default:
         throw new ExpectedNodeException("statement", nextToken);
     }
@@ -184,6 +187,18 @@ public final class Parser {
         currentToken.getLocation().getLastByteLocation());
 
     return new IfStatement(condition, ifStatement, elseStatement, location);
+  }
+
+  private ReturnStatement parseReturnStatement() throws ParseException {
+    final ByteLocation startLocation = nextToken.getLocation().getFirstByteLocation();
+    advance();
+
+    final Expression expression = parseExpression();
+    final SegmentLocation location = new SegmentLocation(
+        startLocation,
+        currentToken.getLocation().getLastByteLocation());
+
+    return new ReturnStatement(expression, location);
   }
 
   private BreakStatement parseBreakStatement() throws ParseException {
